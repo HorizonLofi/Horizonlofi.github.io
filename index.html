@@ -87,28 +87,40 @@ button.active{
 </div>
 
 <script>
-// Base URL for img1 (dynamic)
+// Base URL for GIF folder
 const baseUrl = "https://raw.githubusercontent.com/HorizonLofi/Horizonlofi.github.io/main/Gif/";
 
 // img2 fixed (unchanged)
-const img2 = "https://raw.githubusercontent.com/Horizonlofi/Horizonlofi.github.io/main/2.gif";
+const img2 = "https://raw.githubusercontent.com/HorizonLofi/Horizonlofi.github.io/main/2.gif";
 
-// Function to get token ID from URL
+// Function to extract token ID from URL
 function getTokenId() {
-    // Get tokenId from URL parameter (e.g., ?tokenId=98)
-    const urlParams = new URLSearchParams(window.location.search);
-    let tokenId = urlParams.get('tokenId');
+    let tokenId = null;
     
-    // If not found, try to get from URL path (e.g., /98)
+    // Method 1: Check referrer for OpenSea URL
+    if (document.referrer && document.referrer.includes('opensea.io')) {
+        const match = document.referrer.match(/\/(\d+)(?:\?|$)/);
+        if (match) tokenId = match[1];
+    }
+    
+    // Method 2: Get tokenId from URL parameter (e.g., ?tokenId=30)
+    if (!tokenId) {
+        const urlParams = new URLSearchParams(window.location.search);
+        tokenId = urlParams.get('tokenId');
+    }
+    
+    // Method 3: Get from URL path (e.g., /30)
     if (!tokenId) {
         const pathSegments = window.location.pathname.split('/');
-        const lastSegment = pathSegments[pathSegments.length - 1];
-        if (!isNaN(lastSegment) && lastSegment !== "") {
-            tokenId = lastSegment;
+        for (let i = pathSegments.length - 1; i >= 0; i--) {
+            if (pathSegments[i] && !isNaN(pathSegments[i]) && pathSegments[i].trim() !== "") {
+                tokenId = pathSegments[i];
+                break;
+            }
         }
     }
     
-    // If still not found, try from hash (e.g., #98)
+    // Method 4: Get from hash (e.g., #30)
     if (!tokenId && window.location.hash) {
         const hash = window.location.hash.substring(1);
         if (!isNaN(hash) && hash !== "") {
@@ -120,31 +132,32 @@ function getTokenId() {
     return tokenId || "1";
 }
 
-// Get current token ID and construct img1 dynamically
+// Get current token ID
 const currentTokenId = getTokenId();
+
+// Construct img1 dynamically
 const img1 = `${baseUrl}${currentTokenId}.gif`;
 
 const nftImage = document.getElementById("nftImage");
 const buttons = document.querySelectorAll("button");
 
-// Set initial image (img1 by default)
+// Set initial image
 nftImage.src = img1;
 
 function changeImage(num){
   if(num === 1){
-    nftImage.src = img1;  // Dynamic based on token ID
+    nftImage.src = img1;
   } else {
-    nftImage.src = img2;  // Fixed: always 2.gif
+    nftImage.src = img2;
   }
 
   buttons.forEach(b => b.classList.remove("active"));
   buttons[num-1].classList.add("active");
 }
 
-// Debug info (optional - can remove)
-console.log(`Current Token ID: ${currentTokenId}`);
-console.log(`Dynamic img1 URL: ${img1}`);
-console.log(`Fixed img2 URL: ${img2}`);
+// Debug information
+console.log(`Token ID: ${currentTokenId}`);
+console.log(`Image URL: ${img1}`);
 </script>
 
 </body>
