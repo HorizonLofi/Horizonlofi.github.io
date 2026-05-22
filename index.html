@@ -78,7 +78,7 @@ button.active{
 <body>
 
 <div class="nft-box">
-  <img id="nftImage" src="https://raw.githubusercontent.com/Horizonlofi/Horizonlofi.github.io/main/1.gif">
+  <img id="nftImage" src="">
 
   <div class="buttons">
     <button class="active" onclick="changeImage(1)">HL</button>
@@ -87,22 +87,64 @@ button.active{
 </div>
 
 <script>
-const img1 = "https://raw.githubusercontent.com/Horizonlofi/Horizonlofi.github.io/main/1.gif";
+// Base URL for img1 (dynamic)
+const baseUrl = "https://raw.githubusercontent.com/HorizonLofi/Horizonlofi.github.io/main/Gif/";
+
+// img2 fixed (unchanged)
 const img2 = "https://raw.githubusercontent.com/Horizonlofi/Horizonlofi.github.io/main/2.gif";
+
+// Function to get token ID from URL
+function getTokenId() {
+    // Get tokenId from URL parameter (e.g., ?tokenId=98)
+    const urlParams = new URLSearchParams(window.location.search);
+    let tokenId = urlParams.get('tokenId');
+    
+    // If not found, try to get from URL path (e.g., /98)
+    if (!tokenId) {
+        const pathSegments = window.location.pathname.split('/');
+        const lastSegment = pathSegments[pathSegments.length - 1];
+        if (!isNaN(lastSegment) && lastSegment !== "") {
+            tokenId = lastSegment;
+        }
+    }
+    
+    // If still not found, try from hash (e.g., #98)
+    if (!tokenId && window.location.hash) {
+        const hash = window.location.hash.substring(1);
+        if (!isNaN(hash) && hash !== "") {
+            tokenId = hash;
+        }
+    }
+    
+    // Default to 1 if no token ID found
+    return tokenId || "1";
+}
+
+// Get current token ID and construct img1 dynamically
+const currentTokenId = getTokenId();
+const img1 = `${baseUrl}${currentTokenId}.gif`;
 
 const nftImage = document.getElementById("nftImage");
 const buttons = document.querySelectorAll("button");
 
+// Set initial image (img1 by default)
+nftImage.src = img1;
+
 function changeImage(num){
   if(num === 1){
-    nftImage.src = img1;
+    nftImage.src = img1;  // Dynamic based on token ID
   } else {
-    nftImage.src = img2;
+    nftImage.src = img2;  // Fixed: always 2.gif
   }
 
   buttons.forEach(b => b.classList.remove("active"));
   buttons[num-1].classList.add("active");
 }
+
+// Debug info (optional - can remove)
+console.log(`Current Token ID: ${currentTokenId}`);
+console.log(`Dynamic img1 URL: ${img1}`);
+console.log(`Fixed img2 URL: ${img2}`);
 </script>
 
 </body>
