@@ -22,196 +22,40 @@
         }
 
         body {
-            min-height: 100vh;
-            /* Win95 teal desktop */
-            background: #008080;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
-            padding: 16px;
-        }
-
-        /* ── Win95 Window Shell ── */
-        .win95-window {
-            width: 528px;
-            background: #c0c0c0;
-            /* classic raised border */
-            border-top:    2px solid #ffffff;
-            border-left:   2px solid #ffffff;
-            border-right:  2px solid #808080;
-            border-bottom: 2px solid #808080;
-            box-shadow: 2px 2px 0 #000000;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            /* Win95 classic teal desktop */
+            background-color: #008080;
+            /* subtle teal tile pattern */
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px,
+                    transparent 1px, transparent 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px,
+                    transparent 1px, transparent 4px
+                );
             display: flex;
             flex-direction: column;
-        }
-
-        /* Title bar */
-        .win95-titlebar {
-            background: linear-gradient(to right, #000080, #1084d0);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 3px 4px 3px 6px;
-            gap: 4px;
-        }
-        .win95-titlebar-left {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex: 1;
-            min-width: 0;
-        }
-        .win95-icon {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-            image-rendering: pixelated;
-        }
-        .win95-title {
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            letter-spacing: 0;
-        }
-        /* Window control buttons */
-        .win95-controls {
-            display: flex;
-            gap: 2px;
-            flex-shrink: 0;
-        }
-        .win95-btn {
-            width: 16px;
-            height: 14px;
-            background: #c0c0c0;
-            border-top:    1px solid #ffffff;
-            border-left:   1px solid #ffffff;
-            border-right:  1px solid #808080;
-            border-bottom: 1px solid #808080;
-            font-size: 9px;
-            font-weight: bold;
-            color: #000000;
-            cursor: default;
-            display: flex;
             align-items: center;
             justify-content: center;
-            line-height: 1;
-            padding: 0;
-            font-family: 'MS Sans Serif', Arial, sans-serif;
-        }
-        .win95-btn:active {
-            border-top:    1px solid #808080;
-            border-left:   1px solid #808080;
-            border-right:  1px solid #ffffff;
-            border-bottom: 1px solid #ffffff;
-        }
-        .win95-btn.maximize { font-size: 8px; }
-
-        /* Menu bar */
-        .win95-menubar {
-            background: #c0c0c0;
-            border-bottom: 1px solid #808080;
-            display: flex;
-            align-items: center;
-            padding: 1px 4px;
-            gap: 0;
-        }
-        .win95-menu-item {
-            font-size: 11px;
-            color: #000000;
-            padding: 2px 8px;
-            cursor: default;
-        }
-        .win95-menu-item:hover {
-            background: #000080;
-            color: #ffffff;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
         }
 
-        /* Toolbar with AN / OG buttons */
-        .win95-toolbar {
-            background: #c0c0c0;
-            border-bottom: 1px solid #808080;
-            display: flex;
-            align-items: center;
-            padding: 3px 6px;
-            gap: 4px;
-        }
-        .win95-toolbar-sep {
-            width: 1px;
-            height: 18px;
-            background: #808080;
-            border-right: 1px solid #ffffff;
-            margin: 0 3px;
-        }
-        .win95-tool-btn {
-            background: #c0c0c0;
-            border-top:    1px solid #ffffff;
-            border-left:   1px solid #ffffff;
-            border-right:  1px solid #808080;
-            border-bottom: 1px solid #808080;
-            color: #000000;
-            font-size: 10px;
-            font-weight: bold;
-            font-family: 'MS Sans Serif', Arial, sans-serif;
-            padding: 2px 10px;
-            cursor: pointer;
-            letter-spacing: 1px;
-            min-width: 36px;
-            text-align: center;
-        }
-        .win95-tool-btn:active,
-        .win95-tool-btn.active {
-            border-top:    1px solid #808080;
-            border-left:   1px solid #808080;
-            border-right:  1px solid #ffffff;
-            border-bottom: 1px solid #ffffff;
-            background: #b0b0b0;
-        }
-        .win95-tool-btn:focus-visible { outline: 1px dotted #000; }
-
-        /* Content area (the pixel canvas) */
-        .win95-content {
+        /* ── fullscreen canvas wrapper ── */
+        .canvas-wrap {
             position: relative;
-            /* sunken / inset look */
-            border-top:    2px solid #808080;
-            border-left:   2px solid #808080;
-            border-right:  2px solid #ffffff;
-            border-bottom: 2px solid #ffffff;
-            margin: 4px 6px 4px 6px;
-            overflow: hidden;
-            height: 460px;
+            width: 100vmin;
+            height: 100vmin;
+            max-width: 100vw;
+            max-height: 100vh;
         }
 
-        /* Status bar */
-        .win95-statusbar {
-            background: #c0c0c0;
-            border-top: 1px solid #808080;
-            display: flex;
-            align-items: center;
-            padding: 2px 6px;
-            gap: 6px;
-        }
-        .win95-status-panel {
-            flex: 1;
-            border-top:    1px solid #808080;
-            border-left:   1px solid #808080;
-            border-right:  1px solid #ffffff;
-            border-bottom: 1px solid #ffffff;
-            font-size: 10px;
-            color: #000000;
-            padding: 1px 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .win95-status-panel.small {
-            flex: 0 0 80px;
-        }
-
-        /* ── Pixel grid (unchanged logic) ── */
+        /* ── pixel grid ── */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(24, 1fr);
@@ -268,80 +112,68 @@
             display: block;
         }
 
-        @media (max-width: 560px) {
-            .win95-window { width: 98vw; }
-            .win95-content { height: 72vw; }
-            .win95-menu-item,
-            .win95-status-panel { font-size: 9px; }
+        /* ── Win95 button row ── */
+        .btn-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
         }
+
+        .win95-btn {
+            background: #c0c0c0;
+            /* classic raised bevel */
+            border-top:    2px solid #ffffff;
+            border-left:   2px solid #ffffff;
+            border-right:  2px solid #404040;
+            border-bottom: 2px solid #404040;
+            color: #000000;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            padding: 4px 22px;
+            cursor: pointer;
+            min-width: 64px;
+            text-align: center;
+            text-transform: uppercase;
+            image-rendering: pixelated;
+        }
+        .win95-btn:active {
+            border-top:    2px solid #404040;
+            border-left:   2px solid #404040;
+            border-right:  2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            padding: 5px 21px 3px 23px; /* subtle shift on press */
+        }
+        .win95-btn.active {
+            border-top:    2px solid #404040;
+            border-left:   2px solid #404040;
+            border-right:  2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            background: #b0b0b0;
+        }
+        .win95-btn:focus-visible { outline: 1px dotted #000000; }
     </style>
 </head>
 <body>
 
-<div class="win95-window">
-
-    <!-- Title Bar -->
-    <div class="win95-titlebar">
-        <div class="win95-titlebar-left">
-            <!-- tiny pixel skull icon as inline SVG -->
-            <svg class="win95-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <rect width="16" height="16" fill="#000080"/>
-                <rect x="4" y="2" width="8" height="7" fill="#c0c0c0"/>
-                <rect x="3" y="4" width="10" height="5" fill="#c0c0c0"/>
-                <rect x="5" y="9" width="6" height="3" fill="#c0c0c0"/>
-                <rect x="5" y="12" width="2" height="2" fill="#c0c0c0"/>
-                <rect x="9" y="12" width="2" height="2" fill="#c0c0c0"/>
-                <rect x="5" y="4" width="2" height="3" fill="#000080"/>
-                <rect x="9" y="4" width="2" height="3" fill="#000080"/>
-            </svg>
-            <span class="win95-title">404 Punk — 404punks.xyz</span>
-        </div>
-        <div class="win95-controls">
-            <div class="win95-btn">_</div>
-            <div class="win95-btn maximize">□</div>
-            <div class="win95-btn">✕</div>
-        </div>
-    </div>
-
-    <!-- Menu Bar -->
-    <div class="win95-menubar">
-        <span class="win95-menu-item">File</span>
-        <span class="win95-menu-item">View</span>
-        <span class="win95-menu-item">Punk</span>
-        <span class="win95-menu-item">Help</span>
-    </div>
-
-    <!-- Toolbar -->
-    <div class="win95-toolbar">
-        <button class="win95-tool-btn active" id="animateBtn">AN</button>
-        <button class="win95-tool-btn" id="originalBtn">OG</button>
-        <div class="win95-toolbar-sep"></div>
-        <span style="font-size:10px;color:#000;font-family:'MS Sans Serif',Arial,sans-serif;">404 Punk</span>
-    </div>
-
-    <!-- Canvas -->
-    <div class="win95-content">
+    <div class="canvas-wrap">
         <div class="grid-container" id="pixelGrid"></div>
         <div class="original-image-container" id="originalImageContainer">
             <img id="originalImage" src="" alt="404 Punk Original">
         </div>
     </div>
 
-    <!-- Status Bar -->
-    <div class="win95-statusbar">
-        <div class="win95-status-panel" id="statusText">Ready</div>
-        <div class="win95-status-panel small">404punks.xyz</div>
+    <div class="btn-row">
+        <button class="win95-btn active" id="animateBtn">AN</button>
+        <button class="win95-btn" id="originalBtn">OG</button>
     </div>
-
-</div>
 
 <script>
 (function () {
-    // ---------- CONFIG ----------
     const AN_BASE = 'https://ipfs.io/ipfs/bafybeid4akomqdqr5ugv22gas4gm7cqgxja66omjfuomtbq64v5m7c4fkm';
     const OG_BASE = 'https://ipfs.io/ipfs/bafybeid4akomqdqr5ugv22gas4gm7cqgxja66omjfuomtbq64v5m7c4fkm';
 
-    // ---------- TOKEN ID ----------
     let TOKEN_ID = 107;
     try {
         const params = new URLSearchParams(window.location.search);
@@ -355,7 +187,6 @@
         }
     } catch (_) {}
 
-    // ---------- PALETTE ----------
     const PALETTE = [
         "#000000","#FFFFFF","#FF0000","#00FF00","#0000FF",
         "#FFFF00","#00FFFF","#FF00FF","#C0C0C0","#808080",
@@ -385,22 +216,18 @@
     const GRID_SIZE = 24;
     const TOTAL = GRID_SIZE * GRID_SIZE;
 
-    const gridEl        = document.getElementById('pixelGrid');
+    const gridEl            = document.getElementById('pixelGrid');
     const originalContainer = document.getElementById('originalImageContainer');
-    const originalImg   = document.getElementById('originalImage');
-    const animateBtn    = document.getElementById('animateBtn');
-    const originalBtn   = document.getElementById('originalBtn');
-    const statusText    = document.getElementById('statusText');
+    const originalImg       = document.getElementById('originalImage');
+    const animateBtn        = document.getElementById('animateBtn');
+    const originalBtn       = document.getElementById('originalBtn');
 
-    let pixelColorSet    = [];
+    let pixelColorSet     = [];
     let currentColorIndex = new Int8Array(TOTAL);
-    let pixelElements    = [];
-    let isOriginalMode   = false;
-    let imageLoaded      = false;
+    let pixelElements     = [];
+    let isOriginalMode    = false;
+    let imageLoaded       = false;
 
-    function setStatus(msg) { statusText.textContent = msg; }
-
-    // ---------- UTILS ----------
     function randInt(max) { return Math.floor(Math.random() * max); }
 
     function rgbToHex(r, g, b) {
@@ -421,7 +248,6 @@
         return idx;
     }
 
-    // ---------- GRID ----------
     function buildGrid() {
         const frag = document.createDocumentFragment();
         pixelElements = []; pixelColorSet = [];
@@ -450,12 +276,10 @@
             px.style.backgroundColor = PALETTE[pixelColorSet[i][ni]];
             px.classList.add('pixel-clicked');
             setTimeout(() => px.classList.remove('pixel-clicked'), 150);
-            setStatus('Pixel ' + i + ' recolored — ' + PALETTE[pixelColorSet[i][ni]]);
         });
     }
 
     function loadImageToGrid(url, cb) {
-        setStatus('Loading punk #' + TOKEN_ID + '...');
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = function () {
@@ -482,14 +306,12 @@
         };
         img.onerror = function () {
             console.warn('404 Punk: image load failed —', url);
-            setStatus('Error loading punk #' + TOKEN_ID);
             imageLoaded = true;
             if (cb) cb();
         };
         img.src = url;
     }
 
-    // ---------- MODE SWITCH ----------
     function setANMode() {
         if (!imageLoaded) return;
         isOriginalMode = false;
@@ -498,7 +320,6 @@
         gridEl.classList.remove('hidden');
         originalContainer.classList.remove('visible');
         pixelElements.forEach(el => { el.classList.remove('pixel-disabled'); el.style.cursor = 'pointer'; });
-        setStatus('AN mode — click pixels to recolor | Punk #' + TOKEN_ID);
     }
     function setOGMode() {
         if (!imageLoaded) return;
@@ -509,10 +330,8 @@
         originalContainer.classList.add('visible');
         originalImg.src = OG_BASE + '/' + TOKEN_ID + '.png';
         pixelElements.forEach(el => { el.classList.add('pixel-disabled'); el.style.cursor = 'default'; });
-        setStatus('OG mode — original art | Punk #' + TOKEN_ID);
     }
 
-    // ---------- INIT ----------
     buildGrid();
     loadImageToGrid(AN_BASE + '/' + TOKEN_ID + '.png', setANMode);
     animateBtn.addEventListener('click', setANMode);
