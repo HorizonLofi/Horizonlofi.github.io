@@ -1,351 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 Punk</title>
+<meta charset="UTF-8">
+<title>Dynamic NFT Viewer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="404 Punk" />
-    <meta property="og:description" content="404 signal detected | 10k punks loading... | built by frens | powered by vibes | welcome to 404 punks" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://404punks.xyz" />
-    <meta property="og:image" content="https://ipfs.io/ipfs/bafybeid4akomqdqr5ugv22gas4gm7cqgxja66omjfuomtbq64v5m7c4fkm/107.png" />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#0f172a;
+  font-family:Arial;
+}
 
-    <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            user-select: none;
-        }
-        body {
-            min-height: 100vh;
-            background: #1a1a2e;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
-            padding: 16px;
-        }
-        .card {
-            width: 512px;
-            height: 512px;
-            background: #0d0d1a;
-            border-radius: 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 0 2px #3a3a5a inset;
-            overflow: hidden;
-            position: relative;
-        }
-        .card-toolbar {
-            display: flex;
-            gap: 10px;
-            padding: 14px 20px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 10;
-            width: 100%;
-            pointer-events: none;
-        }
-        .card-toolbar button {
-            pointer-events: auto;
-            background: rgba(20,20,40,0.75);
-            backdrop-filter: blur(8px);
-            border: 1px solid #6a6a8a;
-            color: #f0f0ff;
-            font-weight: 700;
-            font-size: 0.85rem;
-            padding: 6px 20px;
-            border-radius: 40px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            transition: transform 0.15s, background 0.15s;
-            font-family: inherit;
-            text-transform: uppercase;
-        }
-        .card-toolbar button:active { transform: scale(0.94); }
-        .card-toolbar button:focus-visible { outline: 2px solid #aac8ff; }
-        #animateBtn {
-            background: rgba(70,130,200,0.75);
-            border-color: #8ab4ff;
-        }
-        #originalBtn {
-            background: rgba(180,140,70,0.7);
-            border-color: #eac880;
-        }
-        .card-toolbar button.active {
-            background: rgba(50,200,100,0.75);
-            border-color: #80ffb0;
-            box-shadow: 0 0 25px rgba(50,200,100,0.25);
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(24, 1fr);
-            grid-template-rows: repeat(24, 1fr);
-            width: 100%;
-            height: 100%;
-            background: #12121f;
-            image-rendering: pixelated;
-        }
-        .grid-container.hidden { display: none; }
-        .pixel {
-            background: #1f1f33;
-            width: 100%;
-            height: 100%;
-            transition: background 0.06s ease, transform 0.08s ease;
-            cursor: pointer;
-            outline: 1px solid rgba(80,80,120,0.12);
-            outline-offset: -1px;
-            image-rendering: pixelated;
-        }
-        .pixel:hover {
-            transform: scale(1.06);
-            z-index: 2;
-            outline: 1px solid rgba(255,255,255,0.4);
-        }
-        .pixel-clicked {
-            transform: scale(0.92);
-            transition: transform 0.05s;
-            outline: 1px solid rgba(255,255,255,0.6);
-        }
-        .pixel-disabled { cursor: default !important; }
-        .pixel-disabled:hover {
-            transform: none !important;
-            outline: 1px solid rgba(80,80,120,0.12) !important;
-        }
-        .original-image-container {
-            display: none;
-            width: 100%;
-            height: 100%;
-            background: #12121f;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .original-image-container.visible { display: flex; }
-        .original-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            image-rendering: pixelated;
-            display: block;
-        }
-        @media (max-width: 540px) {
-            .card { width: 96vw; height: 96vw; border-radius: 20px; }
-            .card-toolbar { padding: 10px 14px; gap: 8px; }
-            .card-toolbar button { font-size: 0.7rem; padding: 4px 14px; }
-        }
-    </style>
+/* NFT Container 512x512 */
+.nft-box{
+  width:512px;
+  height:512px;
+  position:relative;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 0 25px rgba(0,0,0,0.5);
+}
+
+/* NFT Image */
+.nft-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:0.4s ease;
+}
+
+/* Overlay Buttons */
+.buttons{
+  position:absolute;
+  top:10px;
+  right:10px;
+  display:flex;
+  gap:10px;
+}
+
+button{
+  padding:8px 12px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background:rgba(255,255,255,0.2);
+  color:white;
+  backdrop-filter:blur(8px);
+  transition:0.3s;
+}
+
+button:hover{
+  background:rgba(255,255,255,0.4);
+  transform:scale(1.05);
+}
+
+/* Active button */
+button.active{
+  background:#38bdf8;
+  color:black;
+}
+
+/* Mobile responsive */
+@media(max-width:600px){
+  .nft-box{
+    width:90vw;
+    height:90vw;
+  }
+}
+</style>
 </head>
+
 <body>
-<div class="card">
-    <div class="card-toolbar">
-        <button id="animateBtn" class="active">AN</button>
-        <button id="originalBtn">OG</button>
-    </div>
-    <div class="grid-container" id="pixelGrid"></div>
-    <div class="original-image-container" id="originalImageContainer">
-        <img id="originalImage" src="" alt="404 Punk Original">
-    </div>
+
+<div class="nft-box">
+  <img id="nftImage" src="">
+
+  <div class="buttons">
+    <button class="active" onclick="changeImage(1)">HL</button>
+    <button onclick="changeImage(2)">ORG</button>
+  </div>
 </div>
 
 <script>
-(function () {
-    // ---------- CONFIG ----------
-    const AN_BASE = 'https://ipfs.io/ipfs/bafybeid4akomqdqr5ugv22gas4gm7cqgxja66omjfuomtbq64v5m7c4fkm';
-    const OG_BASE = 'https://ipfs.io/ipfs/bafybeid4akomqdqr5ugv22gas4gm7cqgxja66omjfuomtbq64v5m7c4fkm';
+// Base URL for img1 (dynamic)
+const baseUrl = "https://raw.githubusercontent.com/HorizonLofi/Horizonlofi.github.io/main/Gif/";
 
-    // ---------- TOKEN ID ----------
-    let TOKEN_ID = 107;
-    try {
-        const params = new URLSearchParams(window.location.search);
-        const idParam = params.get('id') || params.get('tokenId') || params.get('token');
-        if (idParam) {
-            const parsed = parseInt(idParam, 10);
-            if (!isNaN(parsed) && parsed > 0) TOKEN_ID = parsed;
-        } else {
-            const num = parseInt(window.location.pathname.split('/').pop(), 10);
-            if (!isNaN(num) && num > 0) TOKEN_ID = num;
+// img2 fixed (unchanged)
+const img2 = "https://raw.githubusercontent.com/Horizonlofi/Horizonlofi.github.io/main/2.gif";
+
+// Function to get token ID from URL
+function getTokenId() {
+    // Get tokenId from URL parameter (e.g., ?tokenId=98)
+    const urlParams = new URLSearchParams(window.location.search);
+    let tokenId = urlParams.get('tokenId');
+    
+    // If not found, try to get from URL path (e.g., /98)
+    if (!tokenId) {
+        const pathSegments = window.location.pathname.split('/');
+        const lastSegment = pathSegments[pathSegments.length - 1];
+        if (!isNaN(lastSegment) && lastSegment !== "") {
+            tokenId = lastSegment;
         }
-    } catch (_) {}
-
-    // ---------- PALETTE ----------
-    const PALETTE = [
-        "#000000","#FFFFFF","#FF0000","#00FF00","#0000FF",
-        "#FFFF00","#00FFFF","#FF00FF","#C0C0C0","#808080",
-        "#800000","#808000","#008000","#800080","#008080",
-        "#000080","#FFA500","#A52A2A","#8B4513","#2F4F4F",
-        "#556B2F","#D2691E","#FF7F50","#6495ED","#DC143C",
-        "#00FFFF","#00008B","#008B8B","#B8860B","#A9A9A9",
-        "#006400","#BDB76B","#8B008B","#556B2F","#FF8C00",
-        "#9932CC","#8B0000","#E9967A","#8FBC8F","#483D8B",
-        "#2F4F4F","#00CED1","#9400D3","#FF1493","#00BFFF",
-        "#696969","#1E90FF","#B22222","#FFFAF0","#228B22",
-        "#FF00FF","#DCDCDC","#F8F8FF","#FFD700","#DAA520",
-        "#808080","#008000","#ADFF2F","#F0FFF0","#FF69B4",
-        "#CD5C5C","#4B0082","#F0E68C","#E6E6FA","#FFF0F5",
-        "#7CFC00","#FFFACD","#ADD8E6","#F08080","#E0FFFF",
-        "#FAFAD2","#D3D3D3","#90EE90","#FFB6C1","#FFA07A",
-        "#20B2AA","#87CEFA","#8470FF","#778899","#B0C4DE",
-        "#FFFFE0","#00FF7F","#F5DEB3","#FFE4B5","#FFDEAD",
-        "#F5F5DC","#FDF5E6","#FFE4E1","#FAF0E6","#F0F8FF",
-        "#F5F5F5","#FFF8DC","#FFEBCD","#FFEFD5","#FFDAB9",
-        "#CD853F","#D2691E","#8B4513","#A0522D","#A52A2A",
-        "#800000","#FF4500","#FF6347","#FF7F50","#FF8C00",
-        "#FFA500","#FFD700","#DAA520","#B8860B","#CD853F",
-        "#D2691E","#8B4513","#A0522D","#A52A2A","#800000"
-    ];
-
-    const GRID_SIZE = 24;
-    const TOTAL = GRID_SIZE * GRID_SIZE;
-
-    const gridEl = document.getElementById('pixelGrid');
-    const originalContainer = document.getElementById('originalImageContainer');
-    const originalImg = document.getElementById('originalImage');
-    const animateBtn = document.getElementById('animateBtn');
-    const originalBtn = document.getElementById('originalBtn');
-
-    let pixelColorSet = [];
-    let currentColorIndex = new Int8Array(TOTAL);
-    let pixelElements = [];
-    let isOriginalMode = false;
-    let imageLoaded = false;
-
-    // ---------- UTILS ----------
-    function randInt(max) { return Math.floor(Math.random() * max); }
-
-    function rgbToHex(r, g, b) {
-        return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1).toUpperCase();
     }
-
-    function hexToRgb(hex) {
-        const n = parseInt(hex.replace('#', ''), 16);
-        return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-    }
-
-    function closestPaletteIndex(hex) {
-        const [r, g, b] = hexToRgb(hex);
-        let min = Infinity, idx = 0;
-        for (let i = 0; i < PALETTE.length; i++) {
-            const [pr, pg, pb] = hexToRgb(PALETTE[i]);
-            const d = (r - pr) ** 2 + (g - pg) ** 2 + (b - pb) ** 2;
-            if (d < min) { min = d; idx = i; if (d === 0) break; }
+    
+    // If still not found, try from hash (e.g., #98)
+    if (!tokenId && window.location.hash) {
+        const hash = window.location.hash.substring(1);
+        if (!isNaN(hash) && hash !== "") {
+            tokenId = hash;
         }
-        return idx;
     }
+    
+    // Default to 1 if no token ID found
+    return tokenId || "1";
+}
 
-    // ---------- GRID ----------
-    function buildGrid() {
-        const frag = document.createDocumentFragment();
-        pixelElements = [];
-        pixelColorSet = [];
-        currentColorIndex.fill(0);
+// Get current token ID and construct img1 dynamically
+const currentTokenId = getTokenId();
+const img1 = `${baseUrl}${currentTokenId}.gif`;
 
-        for (let i = 0; i < TOTAL; i++) {
-            const set = new Set();
-            while (set.size < 4) set.add(randInt(PALETTE.length));
-            const arr = Array.from(set);
-            pixelColorSet.push(arr);
+const nftImage = document.getElementById("nftImage");
+const buttons = document.querySelectorAll("button");
 
-            const px = document.createElement('div');
-            px.className = 'pixel';
-            px.dataset.index = i;
-            px.style.backgroundColor = PALETTE[arr[0]];
-            frag.appendChild(px);
-            pixelElements.push(px);
-        }
-        gridEl.appendChild(frag);
+// Set initial image (img1 by default)
+nftImage.src = img1;
 
-        // Single delegated click listener — faster than per-pixel listeners
-        gridEl.addEventListener('click', function (e) {
-            if (isOriginalMode) return;
-            const px = e.target;
-            if (!px.classList.contains('pixel') || px.classList.contains('pixel-disabled')) return;
-            const i = parseInt(px.dataset.index, 10);
-            const ni = (currentColorIndex[i] + 1) % 4;
-            currentColorIndex[i] = ni;
-            px.style.backgroundColor = PALETTE[pixelColorSet[i][ni]];
-            px.classList.add('pixel-clicked');
-            setTimeout(() => px.classList.remove('pixel-clicked'), 150);
-        });
-    }
+function changeImage(num){
+  if(num === 1){
+    nftImage.src = img1;  // Dynamic based on token ID
+  } else {
+    nftImage.src = img2;  // Fixed: always 2.gif
+  }
 
-    function loadImageToGrid(url, cb) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = function () {
-            const canvas = document.createElement('canvas');
-            canvas.width = GRID_SIZE;
-            canvas.height = GRID_SIZE;
-            const ctx = canvas.getContext('2d');
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(img, 0, 0, GRID_SIZE, GRID_SIZE);
-            const data = ctx.getImageData(0, 0, GRID_SIZE, GRID_SIZE).data;
+  buttons.forEach(b => b.classList.remove("active"));
+  buttons[num-1].classList.add("active");
+}
 
-            for (let i = 0; i < TOTAL; i++) {
-                const o = i * 4;
-                const mainIdx = closestPaletteIndex(rgbToHex(data[o], data[o + 1], data[o + 2]));
-                const set = new Set([mainIdx]);
-                while (set.size < 4) set.add(randInt(PALETTE.length));
-                const arr = Array.from(set);
-                // ensure main color is first
-                const pos = arr.indexOf(mainIdx);
-                if (pos > 0) { arr[pos] = arr[0]; arr[0] = mainIdx; }
-                pixelColorSet[i] = arr;
-                currentColorIndex[i] = 0;
-                pixelElements[i].style.backgroundColor = PALETTE[mainIdx];
-            }
-            imageLoaded = true;
-            if (cb) cb();
-        };
-        img.onerror = function () {
-            console.warn('404 Punk: image load failed —', url);
-            imageLoaded = true;
-            if (cb) cb();
-        };
-        img.src = url;
-    }
-
-    // ---------- MODE SWITCH ----------
-    function setANMode() {
-        if (!imageLoaded) return;
-        isOriginalMode = false;
-        animateBtn.classList.add('active');
-        originalBtn.classList.remove('active');
-        gridEl.classList.remove('hidden');
-        originalContainer.classList.remove('visible');
-        pixelElements.forEach(el => {
-            el.classList.remove('pixel-disabled');
-            el.style.cursor = 'pointer';
-        });
-    }
-
-    function setOGMode() {
-        if (!imageLoaded) return;
-        isOriginalMode = true;
-        originalBtn.classList.add('active');
-        animateBtn.classList.remove('active');
-        gridEl.classList.add('hidden');
-        originalContainer.classList.add('visible');
-        originalImg.src = `${OG_BASE}/${TOKEN_ID}.png`;
-        pixelElements.forEach(el => {
-            el.classList.add('pixel-disabled');
-            el.style.cursor = 'default';
-        });
-    }
-
-    // ---------- INIT ----------
-    buildGrid();
-    loadImageToGrid(`${AN_BASE}/${TOKEN_ID}.png`, setANMode);
-
-    animateBtn.addEventListener('click', setANMode);
-    originalBtn.addEventListener('click', setOGMode);
-})();
+// Debug info (optional - can remove)
+console.log(`Current Token ID: ${currentTokenId}`);
+console.log(`Dynamic img1 URL: ${img1}`);
+console.log(`Fixed img2 URL: ${img2}`);
 </script>
+
 </body>
 </html>
